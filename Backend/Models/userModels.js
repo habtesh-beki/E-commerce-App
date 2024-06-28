@@ -7,6 +7,11 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Please provide your name'],
         trim: true,
     },
+    role:{
+        type:String,
+        enum:['user', 'admin'],
+        trim:true
+    },
     email: {
         type: String,
         required: [true, 'Please provide your email'],
