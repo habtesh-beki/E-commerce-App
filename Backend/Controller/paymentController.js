@@ -1,6 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_SECREATE_KEY)
 
-
 exports.createPayment = async ( req, res) => {
     try{
          const {totalPrice} = req.body
@@ -12,7 +11,8 @@ exports.createPayment = async ( req, res) => {
     })
 
     res.status(200).json({
-        clientSecret: paymentIntent.client_secret,
+        //clientSecret:.client_secret
+         paymentIntent,
     })
     }catch(err){
        res.status(400).json({

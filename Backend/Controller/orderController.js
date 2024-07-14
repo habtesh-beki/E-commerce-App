@@ -1,28 +1,20 @@
 // const asyncHandler = require('express-async-handler');
 const Order = require('./../Models/orderModels');
+const catchAsync = require('./../utils/cathAsync')
+const AppError = require('./../utils/appError')
 
-
-exports.getAllOrder = async (req, res) => {
-    try{
-      const allOrder = await Order.find()
+exports.getAllOrder = catchAsync (async (req, res,next) => {
+   const allOrder = await Order.find()
    res.status(200).json({
     status:'success',
     length:allOrder.length,
     data:{
         allOrder
     }
-   })
-    }catch(err){
-        res.status(400).json({
-            status:'fail',
-            message:err.message
-        })
-    }
-  };
+  })});
 
-exports.addOrderItems =  async (req, res) => {
-    try{
-         const {user, orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body;
+exports.addOrderItems =  catchAsync(async (req, res,next) => {
+    const {user, orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body;
 
   if (orderItems && orderItems.length === 0) {
     res.status(400);
@@ -43,57 +35,42 @@ exports.addOrderItems =  async (req, res) => {
         data:{
             newOrder
         }
-    });
-  }
-    }catch(err){
-       res.status(400).json({
-         status:'fail',
-         message:err.message
-       })
-    }
+    })
+  }}
+);
 
-};
-
-
-exports.getOrderById = async (req, res) => {
+exports.getOrderById = catchAsync(async (req, res, next) => {
   const order = await Order.findById(req.params.id).populate('user', 'name email');
-
-  if (order) {
-    res.json(order);
-  } else {
-    res.status(404);
-    throw new Error('Order not found');
+  if(!order){
+   return   next(new AppError('there is not order in this id' , 404))
   }
-};
-exports.updateOrderToPaid = async (req, res) => {
-    try{
-         const order = await Order.findByIdAndUpdate(req.params.id);
+  res.status(200).json({
+    status:'success',
+    length:allOrder.length,
+    data:{
+        order
+    }
+})
+});
+exports.updateOrderToPaid = (async (req, res,next) => {
+      const order = await Order.findByIdAndUpdate(req.params.id);
     res.status(200).json({
         status:'Success',
         data:{
             order
         }
     })
-    }catch(err){
-       res.status(400).json({
-        status:'fail',
-        message:err.message
-       })
-    }
-};
+});
 
-exports.deleteOrder = async (req, res) => {
-    try{
-       await Order.findByIdAndDelete(req.params.id);
+exports.deleteOrder = catchAsync(async (req, res,next) => {
+ const order = await Order.findByIdAndDelete(req.params.id);
+
+   if(!order){
+    return   next(new AppError('there is not order in this id' , 404))
+   }
         res.status(200).json({
         status:'SUCCESS',
         message:'orderDeleted'
-    })
-    }catch(err){
-       res.status(400).json({
-        status:'fail',
-        message:err.message
-       })
-    }
-};
+        })
+});
 

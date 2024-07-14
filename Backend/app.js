@@ -1,6 +1,8 @@
 const express = require('express');
 const morgan = require('morgan')
 ////////////////////
+const AppError = require('./utils/appError')
+const globalErrorHandeler = require('./Controller/errorController')
 const userRoute = require('./Routes/userRoute')
 const productRoute = require('./Routes/productRoute')
 const orderRoute = require('./Routes/orderRoute')
@@ -15,5 +17,8 @@ app.use('/api/products', productRoute)
 app.use('/api/orders', orderRoute)
 app.use('/api/payments', paymentRoute)
 
-
+app.all('*' , (req, res ,next) => {
+   next(new AppError(`can't find URL ${req.originalUrl} on this server` , 404))
+})
+app.use(globalErrorHandeler)
 module.exports = app
