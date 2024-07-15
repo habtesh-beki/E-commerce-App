@@ -2,10 +2,8 @@ const stripe = require('stripe')(process.env.STRIPE_SECREATE_KEY)
 
 exports.createPayment = async ( req, res) => {
     try{
-         const {totalPrice} = req.body
-
-
-    const paymentIntent = await stripe.paymentIntents.create({
+      const {totalPrice} = req.body
+      const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(totalPrice * 100),
       currency:'USD'
     })

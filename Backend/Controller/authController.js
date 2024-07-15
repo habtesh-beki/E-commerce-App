@@ -16,7 +16,6 @@ exports.protect = async (req, res, next) => {
             message: 'You are not logged in! Please log in to get access.'
         });
     }
-
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 

@@ -20,5 +20,7 @@ app.use('/api/payments', paymentRoute)
 app.all('*' , (req, res ,next) => {
    next(new AppError(`can't find URL ${req.originalUrl} on this server` , 404))
 })
+
 app.use(globalErrorHandeler)
+
 module.exports = app

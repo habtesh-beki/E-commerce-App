@@ -40,13 +40,12 @@ exports.addOrderItems =  catchAsync(async (req, res,next) => {
 );
 
 exports.getOrderById = catchAsync(async (req, res, next) => {
-  const order = await Order.findById(req.params.id).populate('user', 'name email');
+  const order = await Order.findById(req.params.id).populate('user');
   if(!order){
    return   next(new AppError('there is not order in this id' , 404))
   }
   res.status(200).json({
     status:'success',
-    length:allOrder.length,
     data:{
         order
     }

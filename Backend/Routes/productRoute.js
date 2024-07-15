@@ -1,5 +1,5 @@
 const express = require('express')
-const productController = require('./../Controller/productController');
+const productController = require('./../Controller/productController')
 const authController = require('./../Controller/authController')
 
 
